@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>註冊/登入 - 貼心護士</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #e0f2fe, #f0f9ff); min-height: 100vh; }
+.container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+.logo { width: 70px; height: 70px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; color: white; }
+h1 { text-align: center; margin-bottom: 8px; color: #1e293b; }
+.subtitle { text-align: center; color: #64748b; margin-bottom: 24px; }
+.tabs { display: flex; margin-bottom: 24px; border-bottom: 2px solid #e2e8f0; }
+.tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab.active { color: #0ea5e9; border-bottom-color: #0ea5e9; font-weight: bold; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; color: #64748b; margin-bottom: 6px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; box-sizing: border-box; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #0ea5e9; }
+.btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+.btn:hover { opacity: 0.9; }
+.btn-secondary { background: #f1f5f9; color: #64748b; }
+.msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: 14px; }
+.msg-success { background: #d1fae5; color: #059669; }
+.msg-error { background: #fee2e2; color: #dc2626; }
+.msg-info { background: #dbeafe; color: #2563eb; }
+.hidden { display: none; }
+.back-link { text-align: center; margin-top: 16px; }
+.back-link a { color: #0ea5e9; text-decoration: none; }
+.info-box { background: #f8fafc; padding: 16px; border-radius: 10px; margin-bottom: 16px; }
+.info-box h3 { font-size: 15px; margin-bottom: 8px; color: #1e293b; }
+.info-box ul { font-size: 13px; color: #64748b; padding-left: 20px; }
+.note { font-size: 12px; color: #64748b; margin-top: 8px; }
+
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; }
+.badge-success { background: #d1fae5; color: #059669; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="box">
+<div class="logo">💊</div>
+<h1>貼心護士</h1>
+<p class="subtitle" id="pageSubtitle">登入您的帳戶</p>
+
+<div id="loginMsg"></div>
+
+<!-- 登入表單 -->
+<div id="loginForm">
+<div class="tabs">
+<div class="tab active" onclick="switchTab('login', 'customer')" id="tabLoginCustomer">客戶登入</div>
+<div class="tab" onclick="switchTab('login', 'nurse')" id="tabLoginNurse">護理師登入</div>
+</div>
+<div style="text-align:center;padding:12px;background:#f8fafc;border-radius:10px;margin-bottom:16px;">
+<span style="color:#64748b;">還沒有帳號？</span>
+<a href="#" onclick="showRegister('customer')" style="color:#0ea5e9;font-weight:bold;">客戶註冊</a>
+<span style="color:#64748b;"> 或 </span>
+<a href="#" onclick="showRegister('nurse')" style="color:#8b5cf6;font-weight:bold;">護理師申請</a>
+</div>
+
+<div class="form-group">
+<label>帳號</label>
+<input type="text" id="loginUsername" placeholder="請輸入帳號">
+</div>
+<div class="form-group">
+<label>密碼</label>
+<input type="password" id="loginPassword" placeholder="請輸入密碼">
+</div>
+<button class="btn" onclick="doLogin()">登入</button>
+
+<div class="back-link">
+<a href="#" onclick="showRegister('customer')">還沒有帳號？立即註冊</a>
+</div>
+</div>
+
+<!-- 客戶註冊 -->
+<div id="registerCustomer" class="hidden">
+<div class="info-box">
+<h3>📋 客戶註冊</h3>
+<ul>
+<li>填寫基本資料預約服務</li>
+<li>查看服務紀錄</li>
+<li>接收派案通知</li>
+</ul>
+</div>
+<div class="form-group">
+<label>姓名 *</label>
+<div class="form-group"><label>使用者名稱 *</label><input type="text" id="regCUsername" placeholder="請輸入登入用帳號"></div>
+<input type="text" id="regCName" placeholder="請輸入姓名">
+</div>
+<div class="form-group">
+<label>電話 *</label>
+<input type="tel" id="regCPhone" placeholder="09XX-XXX-XXX">
+</div>
+<div class="form-group">
+<label>LINE ID</label>
+<input type="text" id="regCLine" placeholder="選填">
+</div>
+<div class="form-group">
+<label>設定密碼 *</label>
+<input type="password" id="regCPassword" placeholder="請設定密碼">
+</div>
+<div class="form-group">
+<label>確認密碼 *</label>
+<input type="password" id="regCPassword2" placeholder="請再次輸入密碼">
+</div>
+<div class="form-group">
+<label>服務類型</label>
+<select id="regCType">
+<option value="">請選擇</option>
+<option value="hospital">🏥 醫院陪護</option>
+<option value="home">🏠 居家照護</option>
+<option value="postop">💉 術後照護</option>
+<option value="longterm">📅 長期照護</option>
+</select>
+</div>
+<div class="form-group">
+<label>縣市</label>
+<select id="regCCity">
+<option value="">請選擇</option>
+<option value="台北市">台北市</option>
+<option value="新北市">新北市</option>
+<option value="桃園市">桃園市</option>
+<option value="台中市">台中市</option>
+<option value="台南市">台南市</option>
+<option value="高雄市">高雄市</option>
+</select>
+</div>
+<div class="form-group">
+<label>備註事項</label>
+<textarea id="regCNotes" placeholder="請描述您的需求" rows="3"></textarea>
+</div>
+<button class="btn" onclick="registerCustomer()">註冊</button>
+<div class="back-link">
+<a href="#" onclick="showLogin()">已有帳號？立即登入</a>
+</div>
+</div>
+
+<!-- 護理師申請 -->
+<div id="registerNurse" class="hidden">
+<div class="info-box">
+<h3>👩⚕️ 護理師申請</h3>
+<ul>
+<li>填寫專業資料開始接案</li>
+<li>管理個人班表</li>
+<li>查看薪資明細</li>
+</ul>
+</div>
+<div class="form-group">
+<label>姓名 *</label>
+<input type="text" id="regNName" placeholder="請輸入姓名">
+</div>
+<div class="form-group">
+<label>電話 *</label>
+<input type="tel" id="regNPhone" placeholder="09XX-XXX-XXX">
+</div>
+<div class="form-group">
+<label>設定密碼 *</label>
+<input type="password" id="regNPassword" placeholder="請設定密碼">
+</div>
+<div class="form-group">
+<label>確認密碼 *</label>
+<input type="password" id="regNPassword2" placeholder="請再次輸入密碼">
+</div>
+<div class="form-group">
+<label>性別</label>
+<select id="regNGender">
+<option value="">請選擇</option>
+<option value="男">男</option>
+<option value="女">女</option>
+</select>
+</div>
+<div class="form-group">
+<label>服務縣市 *</label>
+<select id="regNCity">
+<option value="">請選擇</option>
+<option value="台北市">台北市</option>
+<option value="新北市">新北市</option>
+<option value="桃園市">桃園市</option>
+<option value="台中市">台中市</option>
+<option value="台南市">台南市</option>
+<option value="高雄市">高雄市</option>
+</select>
+</div>
+<div class="form-group">
+<label>醫院單位經驗</label>
+<input type="text" id="regNHospital" placeholder="如：內科病房、加護病房">
+</div>
+<div class="form-group">
+<label>年資 (年)</label>
+<input type="number" id="regNExperience" placeholder="請輸入年資">
+</div>
+<div class="form-group">
+<label>專長</label>
+<input type="text" id="regNSpecialty" placeholder="如：術後照護、長期照護">
+</div>
+<div class="form-group">
+<label>證照編號</label>
+<input type="text" id="regNCert" placeholder="護理師證書號碼">
+</div>
+<div class="form-group">
+<label>自傳 / 工作經歷</label>
+<textarea id="regNWorkExp" placeholder="請描述您的工作經歷" rows="3"></textarea>
+</div>
+<button class="btn" onclick="registerNurse()">提交申請</button>
+<div class="back-link">
+<a href="#" onclick="showLogin()">已有帳號？立即登入</a>
+</div>
+</div>
+
+<!-- 客戶登入後儀表板 -->
+<div id="customerDashboard" class="hidden">
+<h2 style="margin-bottom:20px;">👤 我的帳戶</h2>
+<div class="info-box">
+<div style="font-weight:bold;margin-bottom:8px;" id="cdName"></div>
+<div style="font-size:14px;color:#64748b;" id="cdPhone"></div>
+</div>
+
+<div class="tabs">
+<div class="tab active" onclick="switchCustomerTab('cdRequests')" id="tabCdRequests">我的預約</div>
+<div class="tab" onclick="switchCustomerTab('cdProfile')" id="tabCdProfile">個人資料</div>
+</div>
+
+<div id="cdRequests">
+<div id="customerRequests"></div>
+<button class="btn" onclick="showRequestForm()" style="margin-top:16px;">+ 新增預約</button>
+</div>
+
+<div id="cdProfile" class="hidden">
+<div class="form-group">
+<label>姓名</label>
+<input type="text" id="cdEditName">
+</div>
+<div class="form-group">
+<label>電話</label>
+<input type="tel" id="cdEditPhone">
+</div>
+<div class="form-group">
+<label>LINE ID</label>
+<input type="text" id="cdEditLine">
+</div>
+<div class="form-group">
+<label>縣市</label>
+<select id="cdEditCity"><option value="">請選擇</option><option value="台北市">台北市</option><option value="新北市">新北市</option><option value="桃園市">桃園市</option><option value="台中市">台中市</option><option value="台南市">台南市</option><option value="高雄市">高雄市</option></select>
+</div>
+<button class="btn" onclick="updateCustomerProfile()">儲存變更</button>
+</div>
+
+<button class="btn btn-secondary" onclick="logout()" style="margin-top:20px;">登出</button>
+</div>
+
+</div>
+</div>
+
+<script>
+function previewCert() {
+var input = document.getElementById("regNCertFile");
+if(input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function(e) {
+document.getElementById("certPreview").innerHTML = "<img src=\""+e.target.result+"\" style=\"max-width:200px;border-radius:8px;\">";
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+// Simple password hashing (not for production use - use server-side in real app)
+function hashPassword(password) {
+    // Simple hash: reverse + base64
+    return btoa(password.split('').reverse().join('') + 'salt2026');
+}
+
+var currentLoginType = 'customer';
+var currentUser = null;
+
+function switchTab(type, subType) {
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+    if(type === 'login') {
+        if(subType === 'customer') {
+            document.getElementById('tabLoginCustomer').classList.add('active');
+            currentLoginType = 'customer';
+        } else {
+            document.getElementById('tabLoginNurse').classList.add('active');
+            currentLoginType = 'nurse';
+        }
+    }
+}
+
+function showRegister(type) {
+    document.getElementById('loginForm').classList.add('hidden');
+    document.getElementById('loginMsg').innerHTML = '';
+    if(type === 'customer') {
+        document.getElementById('registerCustomer').classList.remove('hidden');
+        document.getElementById('registerNurse').classList.add('hidden');
+        document.getElementById('pageSubtitle').textContent = '客戶註冊';
+    } else {
+        document.getElementById('registerCustomer').classList.add('hidden');
+        document.getElementById('registerNurse').classList.remove('hidden');
+        document.getElementById('pageSubtitle').textContent = '護理師申請';
+    }
+}
+
+function showLogin() {
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('registerCustomer').classList.add('hidden');
+    document.getElementById('registerNurse').classList.add('hidden');
+    document.getElementById('customerDashboard').classList.add('hidden');
+    document.getElementById('loginMsg').innerHTML = '';
+    document.getElementById('pageSubtitle').textContent = '登入您的帳戶';
+}
+
+function showMsg(type, msg) {
+    document.getElementById('loginMsg').innerHTML = '<div class="msg msg-'+type+'">'+msg+'</div>';
+}
+
+function doLogin() {
+    var username = document.getElementById('loginUsername').value.trim();
+    var password = document.getElementById('loginPassword').value;
+    
+    if(!username || !password) {
+        showMsg('error', '請輸入帳號和密碼');
+        return;
+    }
+    
+    if(currentLoginType === 'customer') {
+        var customers = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
+        var customer = customers.find(function(c){ return (c.username === username || c.phone === username) && c.password === hashPassword(password); });
+        if(customer) {
+            currentUser = customer;
+            showCustomerDashboard(customer);
+        } else {
+            showMsg('error', '帳號或密碼錯誤');
+        }
+    } else {
+        var nurses = JSON.parse(localStorage.getItem('nurses') || '[]');
+        var nurse = nurses.find(function(n){ return n.name === username && n.password === hashPassword(password); });
+        if(nurse) {
+            if(nurse.status === 'pending') {
+                showMsg('error', '您的申請正在審核中，請耐心等候');
+                return;
+            }
+            // Redirect to nurse portal
+            window.location.href = 'nurse/nurse_login.html';
+        } else {
+            showMsg('error', '帳號或密碼錯誤，請先由管理員新增帳號');
+        }
+    }
+}
+
+function registerCustomer() {
+    var username = document.getElementById('regCUsername').value.trim();
+    var name = document.getElementById('regCName').value.trim();
+    var phone = document.getElementById('regCPhone').value.trim();
+    var password = document.getElementById('regCPassword').value;
+    var password2 = document.getElementById('regCPassword2').value;
+    
+    if(!name || !phone || !password) {
+        showMsg('error', '請填寫必要欄位');
+        return;
+    }
+    if(password !== password2) {
+        showMsg('error', '兩次密碼不一致');
+        return;
+    }
+    
+    var customers = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
+    
+    // Check if exists
+    if(!username) { showMsg('error', '請輸入使用者名稱'); return; }
+    if(customers.find(function(c){ return c.username === username; })) { showMsg('error', '此使用者名稱已被使用'); return; }
+    if(customers.find(function(c){ return c.phone === phone; })) {
+        showMsg('error', '此電話已註冊');
+        return;
+    }
+    
+    var newCustomer = {
+        id: 'c'+Date.now(),
+        username: username,
+        name: name,
+        phone: phone,
+        line: document.getElementById('regCLine').value,
+        password: password,
+        serviceType: document.getElementById('regCType').value,
+        city: document.getElementById('regCCity').value,
+        notes: document.getElementById('regCNotes').value,
+        created_at: new Date().toISOString()
+    };
+    
+    customers.push(newCustomer);
+    localStorage.setItem('customerAccounts', JSON.stringify(customers));
+    
+    // Also add to admin's customer list
+    var adminCustomers = JSON.parse(localStorage.getItem('customers') || '[]');
+    adminCustomers.push({
+        name: name,
+        phone: phone,
+        gender: '',
+        age: '',
+        caseType: newCustomer.serviceType,
+        status: 'waiting',
+        city: newCustomer.city,
+        location: '',
+        caregiver: '',
+        notes: newCustomer.notes,
+        customerId: newCustomer.id,
+        created_at: new Date().toISOString()
+    });
+    localStorage.setItem('customers', JSON.stringify(adminCustomers));
+    
+    // Also add to inquiries
+    var inquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+    inquiries.push({
+        name: name,
+        phone: phone,
+        line: newCustomer.line,
+        service_type: newCustomer.serviceType,
+        status: 'registered',
+        created_at: new Date().toISOString()
+    });
+    localStorage.setItem('inquiries', JSON.stringify(inquiries));
+    
+    showMsg('success', '✅ 註冊成功！請登入');
+    setTimeout(showLogin, 1500);
+}
+
+function registerNurse() {
+    var username = document.getElementById('regNUsername').value.trim();
+    var name = document.getElementById('regNName').value.trim();
+    var phone = document.getElementById('regNPhone').value.trim();
+    var password = document.getElementById('regNPassword').value;
+    var password2 = document.getElementById('regNPassword2').value;
+    var city = document.getElementById('regNCity').value;
+    
+    if(!username) { showMsg('error', '請輸入使用者名稱'); return; }
+    if(!name || !phone || !password || !city) {
+        showMsg('error', '請填寫必要欄位');
+        return;
+    }
+    if(password !== password2) {
+        showMsg('error', '兩次密碼不一致');
+        return;
+    }
+    
+    var nurses = JSON.parse(localStorage.getItem('nurses') || '[]');
+    
+    if(nurses.find(function(n){ return n.username === username; })) { showMsg('error', '此使用者名稱已被使用'); return; }
+    if(nurses.find(function(n){ return n.phone === phone; })) {
+        showMsg('error', '此電話已註冊');
+        return;
+    }
+    
+    var newNurse = {
+        id: 'n'+Date.now(),
+        username: username,
+        name: name,
+        phone: phone,
+        line: document.getElementById('regNLine').value,
+        certFile: document.getElementById('regNCertFile').files[0] ? "已上傳" : "",
+        password: hashPassword(password),
+        gender: document.getElementById('regNGender').value,
+        city: city,
+        hospital: document.getElementById('regNHospital').value,
+        experience: document.getElementById('regNExperience').value,
+        specialty: document.getElementById('regNSpecialty').value,
+        cert: document.getElementById('regNCert').value,
+        workExp: document.getElementById('regNWorkExp').value,
+        status: 'pending',
+        created_at: new Date().toISOString()
+    };
+    
+    nurses.push(newNurse);
+    localStorage.setItem('nurses', JSON.stringify(nurses));
+    
+    showMsg('info', '✅ 申請已提交！請等待管理員審核');
+    setTimeout(showLogin, 2000);
+}
+
+function showCustomerDashboard(customer) {
+    document.getElementById('loginForm').classList.add('hidden');
+    document.getElementById('registerCustomer').classList.add('hidden');
+    document.getElementById('customerDashboard').classList.remove('hidden');
+    document.getElementById('pageSubtitle').textContent = '歡迎回來';
+    
+    document.getElementById('cdName').textContent = '👤 ' + customer.name;
+    document.getElementById('cdPhone').textContent = '📱 ' + customer.phone;
+    
+    document.getElementById('cdEditName').value = customer.name;
+    document.getElementById('cdEditPhone').value = customer.phone;
+    document.getElementById('cdEditLine').value = customer.line || '';
+    document.getElementById('cdEditCity').value = customer.city || '';
+    
+    loadCustomerRequests(customer.id);
+}
+
+function switchCustomerTab(tab) {
+    document.querySelectorAll('#customerDashboard .tab').forEach(function(t){t.classList.remove('active');});
+    document.getElementById('tabCd'+tab.charAt(2).toUpperCase() + tab.slice(3)).classList.add('active');
+    
+    document.getElementById('cdRequests').classList.add('hidden');
+    document.getElementById('cdProfile').classList.add('hidden');
+    document.getElementById(tab).classList.remove('hidden');
+}
+
+function loadCustomerRequests(customerId) {
+    var cases = JSON.parse(localStorage.getItem('cases') || '[]');
+    var myCases = cases.filter(function(c){ return c.customer === customer.name; });
+    var typeMap = {hospital:'🏥 醫院', home:'🏠 居家', postop:'💉 術後', longterm:'📅 長照'};
+    
+    if(myCases.length === 0) {
+        document.getElementById('customerRequests').innerHTML = '<div style="text-align:center;padding:30px;color:#64748b;">尚無預約紀錄</div>';
+        return;
+    }
+    
+    var html = myCases.map(function(c){
+        var statusBadge = c.completed ? '<span class="badge badge-success">已完成</span>' : '<span class="badge badge-warning">待執行</span>';
+        return '<div style="background:#f8fafc;padding:14px;border-radius:10px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><strong>'+c.customer+'</strong>'+statusBadge+'</div><div style="font-size:13px;color:#64748b;">📅 '+c.date+' | '+(c.shift==='day'?'☀️ 白班':'🌙 夜班')+' | '+typeMap[c.type]+'</div></div>';
+    }).join('');
+    document.getElementById('customerRequests').innerHTML = html;
+}
+
+function updateCustomerProfile() {
+    var customers = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
+    var idx = customers.findIndex(function(c){ return c.id === currentUser.id; });
+    if(idx >= 0) {
+        customers[idx].name = document.getElementById('cdEditName').value;
+        customers[idx].phone = document.getElementById('cdEditPhone').value;
+        customers[idx].line = document.getElementById('cdEditLine').value;
+        customers[idx].city = document.getElementById('cdEditCity').value;
+        localStorage.setItem('customerAccounts', JSON.stringify(customers));
+        currentUser = customers[idx];
+        showMsg('success', '✅ 資料已更新');
+    }
+}
+
+function showRequestForm() {
+    alert('請致電客服或使用 LINE 預約服務');
+}
+
+function logout() {
+    currentUser = null;
+    showLogin();
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+}
+
+// Check for logged in session
+var savedCustomer = localStorage.getItem('currentCustomerSession');
+if(savedCustomer) {
+    var data = JSON.parse(savedCustomer);
+    var customers = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
+    var customer = customers.find(function(c){ return c.id === data.id; });
+    if(customer) {
+        currentUser = customer;
+        showCustomerDashboard(customer);
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>貼心護士管理系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0ea5e9, #6366f1); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-box { background: white; padding: 50px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); width: 100%; max-width: 420px; text-align: center; }
+.logo { width: 80px; height: 80px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; }
+h1 { font-size: 28px; color: #1e293b; margin-bottom: 8px; }
+.subtitle { color: #64748b; margin-bottom: 30px; font-size: 15px; }
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px; }
+.input-group input { width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; transition: 0.3s; }
+.input-group input:focus { border-color: #0ea5e9; outline: none; box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+.btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-bottom: 12px; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(14,165,233,0.35); }
+.btn-green { background: linear-gradient(135deg, #10b981, #059669); }
+.btn-green:hover { box-shadow: 0 10px 30px rgba(16,185,129,0.35); }
+.error { color: #ef4444; font-size: 14px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="login-box">
+<div class="logo">💊</div>
+<h1>貼心護士</h1>
+<p class="subtitle">管理系統</p>
+
+<div class="input-group">
+<label>使用者名稱</label>
+<input type="text" id="username" placeholder="admin">
+</div>
+
+<div class="input-group">
+<label>密碼</label>
+<input type="password" id="password" placeholder="nurse2026">
+</div>
+
+<button class="btn" onclick="doLogin()">登入系統</button>
+<button class="btn btn-green" onclick="quickLogin()">一鍵登入</button>
+
+<div id="errorMsg" class="error"></div>
+</div>
+
+<script>
+function doLogin() {
+    var u = document.getElementById('username').value;
+    var p = document.getElementById('password').value;
+    
+    if (u === 'admin' && p === 'nurse2026') {
+        // Save login state
+        localStorage.setItem('adminLoggedIn', 'true');
+        // Redirect to full admin
+        window.location.href = 'admin_full.html';
+    } else {
+        document.getElementById('errorMsg').textContent = '密碼錯誤！請輸入 admin / nurse2026';
+    }
+}
+
+function quickLogin() {
+    document.getElementById('username').value = 'admin';
+    document.getElementById('password').value = 'nurse2026';
+    doLogin();
+}
+
+// Allow Enter key
+document.getElementById('password').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>

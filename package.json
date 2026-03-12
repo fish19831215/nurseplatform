@@ -1,0 +1,11 @@
+{
+  "name": "nurse-platform",
+  "version": "1.0.0",
+  "description": "特別護士派遣平台",
+  "scripts": {
+    "start": "npx serve public"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
