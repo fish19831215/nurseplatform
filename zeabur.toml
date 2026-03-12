@@ -1,6 +1,0 @@
-[project]
-name = "nurse-platform"
-
-[build]
-command = ""
-output = "public"
