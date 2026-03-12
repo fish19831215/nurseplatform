@@ -1,16 +1,1121 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>護理師派遣平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貼心護士 | 專業特別護士派遣服務</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==================== 現代化網站樣式 ==================== */
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --dark: #0f172a;
+            --dark-secondary: #1e293b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 背景裝飾 */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+        
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-2%, -2%) rotate(1deg); }
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary);
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+        
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--primary-light);
+            bottom: 20%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        
+        /* 導航欄 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .navbar.scrolled {
+            padding: 12px 0;
+            background: rgba(15, 23, 42, 0.95);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--white);
+        }
+        
+        .logo i {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+        
+        .logo span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+        
+        .btn-login {
+            background: var(--gradient-primary);
+            padding: 10px 24px !important;
+            border-radius: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-login::after {
+            display: none !important;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Hero 區 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 120px 20px 80px;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #f9a8d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        /* 服務項目 */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-card i {
+            font-size: 3rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+        
+        .service-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        /* 流程說明 */
+        .process-section {
+            background: rgba(30, 41, 59, 0.4);
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 15%;
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.3;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            animation: pulseNum 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseNum {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .step p {
+            color: #94a3b8;
+        }
+        
+        /* 費用說明 */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.2);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+        
+        .pricing-card .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+        
+        .pricing-card .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .pricing-card ul li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .pricing-card ul li i {
+            color: var(--success);
+        }
+        
+        /* 聯絡表單 */
+        .contact-section {
+            background: rgba(30, 41, 59, 0.4);
+        }
+        
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info > p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .info-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+        }
+        
+        .contact-form {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+        
+        .form-group select {
+            cursor: pointer;
+        }
+        
+        .contact-form .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        /* 頁尾 */
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .footer-section p,
+        .footer-section li {
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary-light);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #64748b;
+        }
+        
+        /* 響應式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .process-steps::before {
+                display: none;
+            }
+        }
+        
+        /* 動畫類 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-    <h1>歡迎來到護理師派遣平台</h1>
-    <ul>
-        <li><a href="admin.html">管理員後台</a></li>
-        <li><a href="nurse.html">護理師登入</a></li>
-        <li><a href="login.html">登入/註冊</a></li>
-        <li><a href="chatbot.html">線上客服</a></li>
-    </ul>
+    <!-- 背景裝飾 -->
+    <div class="bg-decoration">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+    
+    <!-- 導航欄 -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>貼心護士</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#services">服務項目</a></li>
+                    <li><a href="#process">流程說明</a></li>
+                    <li><a href="#pricing">費用說明</a></li>
+                    <li><a href="#contact">聯絡我們</a></li>
+                    <li><a href="../admin/admin.html" class="btn-login"><i class="fas fa-user"></i> 管理登入</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero 區 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>專業特別護士派遣<br>守護您的至親</h1>
+            <p>嚴選合格護理師，提供醫院陪護、居家照護、術後照護等全方位服務</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">
+                    <i class="fas fa-phone"></i> 立即諮詢
+                </a>
+                <a href="#services" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i> 了解更多
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 服務項目 -->
+    <section class="section" id="services">
+        <div class="container">
+            <h2 class="section-title">服務項目</h2>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <i class="fas fa-hospital-user"></i>
+                    <h3>醫院陪護</h3>
+                    <p>住院期間專業護理人員全程照護，協助日常生活起居</p>
+                </div>
+                <div class="service-card fade-in">
+                    <i class="fas fa-home"></i>
+                    <h3>居家照護</h3>
+                    <p>在家中提供專業居家護理服務，讓家人安心</p>
+                </div>
+                <div class="service-card fade-in">
+                    <i class="fas fa-user-md"></i>
+                    <h3>術後照護</h3>
+                    <p>術後傷口護理、復健協助，加速康復進度</p>
+                </div>
+                <div class="service-card fade-in">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>長期照護</h3>
+                    <p>慢性病、臥床病人全方位照護，減輕家屬負擔</p>
+                </div>
+                <div class="service-card fade-in">
+                    <i class="fas fa-stethoscope"></i>
+                    <h3>陪同就醫</h3>
+                    <p>專業護理人員陪同門診、檢查，用藥諮詢</p>
+                </div>
+                <div class="service-card fade-in">
+                    <i class="fas fa-ambulance"></i>
+                    <h3>臨時照護</h3>
+                    <p>臨時需求、緊急支援服務，快速到府</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 流程說明 -->
+    <section class="section process-section" id="process">
+        <div class="container">
+            <h2 class="section-title">服務流程</h2>
+            <div class="process-steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>諮詢聯繫</h3>
+                    <p>電話或線上諮詢，了解您的需求</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>需求評估</h3>
+                    <p>專業團隊評估照護需求與條件</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>護理師媒合</h3>
+                    <p>配對最適合的護理人員</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h3>服務開始</h3>
+                    <p>簽約後展開專業照護服務</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 費用說明 -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">費用說明</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3>臨時照護</h3>
+                    <div class="price">NT$2,000<span>/天起</span></div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 8小時/日</li>
+                        <li><i class="fas fa-check"></i> 基本護理</li>
+                        <li><i class="fas fa-check"></i> 傷口照護</li>
+                        <li><i class="fas fa-check"></i> 用藥提醒</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured fade-in">
+                    <div class="badge">熱門推薦</div>
+                    <h3>全天照護</h3>
+                    <div class="price">NT$3,500<span>/天起</span></div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 24小時</li>
+                        <li><i class="fas fa-check"></i> 完整護理</li>
+                        <li><i class="fas fa-check"></i> 復健協助</li>
+                        <li><i class="fas fa-check"></i> 緊急対応</li>
+                    </ul>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3>長期照護</h3>
+                    <div class="price">NT$45,000<span>/月起</span></div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 月制方案</li>
+                        <li><i class="fas fa-check"></i> 全方位照護</li>
+                        <li><i class="fas fa-check"></i> 交通費另計</li>
+                        <li><i class="fas fa-check"></i> 客製化服務</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 聯絡表單 -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h2 class="section-title">聯絡我們</h2>
+                    <p>需要專業的照護服務嗎？立即聯繫我們！</p>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-phone"></i> 0988-888-888</li>
+                        <li><i class="fas fa-envelope"></i> service@specialnurse.com</li>
+                        <li><i class="fas fa-clock"></i> 週一至週日 08:00-22:00</li>
+                    </ul>
+                </div>
+                <form class="contact-form fade-in" id="contactForm">
+                    <div class="form-group">
+                        <label>姓名 *</label>
+                        <input type="text" name="name" required placeholder="請輸入您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <label>電話 *</label>
+                        <input type="tel" name="phone" required placeholder="請輸入您的電話">
+                    </div>
+                    <div class="form-group">
+                        <label>LINE ID</label>
+                        <input type="text" name="line" placeholder="請輸入您的LINE ID">
+                    </div>
+                    <div class="form-group">
+                        <label>需求類型 *</label>
+                        <select name="service_type" id="serviceType" onchange="onServiceTypeChange()">
+                            <option value="hospital">🏥 醫院陪護</option>
+                            <option value="home">🏠 居家照護</option>
+                            <option value="postop">💉 術後照護</option>
+                            <option value="longterm">📅 長期照護</option>
+                            <option value="other">❓ 其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="hospitalGroup" style="display:none;">
+                        <label>請選擇醫院</label>
+                        <select name="hospital" id="hospitalSelect">
+                            <option value="">請選擇醫院</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>所在地區域</label>
+                        <div style="display:flex;gap:10px;">
+                            <select name="city" id="publicCitySelect" onchange="updatePublicDistricts()" style="flex:1;">
+                                <option value="">請選擇縣市</option>
+                            </select>
+                            <select name="district" id="publicDistrictSelect" style="flex:1;">
+                                <option value="">請選擇區域</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>需求說明</label>
+                        <textarea name="message" rows="4" placeholder="請描述您的需求..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> 送出諮詢
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>貼心護士</h4>
+                    <p>專業特別護士派遣服務</p>
+                    <p>用愛心呵護每一位病人</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="#services">服務項目</a></li>
+                        <li><a href="#process">流程說明</a></li>
+                        <li><a href="#pricing">費用說明</a></li>
+                        <li><a href="#contact">聯絡我們</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>聯絡資訊</h4>
+                    <p>電話：02-1234-5678</p>
+                    <p>LINE：@nurse123</p>
+                    <p>Email：service@nursetw.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 貼心護士派遣服務. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 滾動動畫
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        fadeElements.forEach(el => observer.observe(el));
+        
+        // 導航欄滾動效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // 表單提交
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 收集表單數據
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // 保存到 localStorage
+            let inquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+            inquiries.push({
+                id: 'I' + Date.now(),
+                ...data,
+                created_at: new Date().toISOString()
+            });
+            localStorage.setItem('inquiries', JSON.stringify(inquiries));
+            
+            alert('感謝您的諮詢！我們會盡快與您聯繫！');
+            this.reset();
+        });
+
+        // 台灣縣市資料
+        const taiwanCities = {
+            "台北市": ["中正區","大同區","中山區","松山區","大安區","萬華區","信義區","士林區","北投區","內湖區","南港區","文山區"],
+            "新北市": ["板橋區","三重區","中和區","永和區","新莊區","土城區","蘆洲區","樹林區","淡水區","汐止區","林口區"],
+            "桃園市": ["桃園區","中壢區","平鎮區","八德區","楊梅區","蘆竹區","大溪區","龍潭區","龜山區"],
+            "台中市": ["中區","東區","南區","西區","北區","北屯區","西屯區","南屯區","太平區","大里區"],
+            "台南市": ["中西區","東區","南區","北區","安平區","永康區","歸仁區","新化區"],
+            "高雄市": ["鹽埕區","鼓山區","左營區","楠梓區","前鎮區","苓雅區","小港區","鳳山區","大寮區"],
+            "新竹市": ["東區","北區","香山區"],
+            "嘉義市": ["東區","西區"],
+            "彰化縣": ["彰化市","員林市","和美鎮","鹿港鎮","溪湖鎮"],
+            "宜蘭縣": ["宜蘭市","羅東鎮","蘇澳鎮","頭城鎮","礁溪鄉"],
+            "花蓮縣": ["花蓮市","鳳林鎮","玉里鎮","新城鄉","吉安鄉"]
+        };
+        
+        // 醫院資料
+        const hospitals = {
+            "台北市": ["台大醫院","台北榮總","馬偕醫院","新光醫院","國泰醫院","長庚醫院","和三軍總醫院"],
+            "新北市": ["亞東醫院","淡水馬偕","雙和醫院","新北市立醫院","耕莘醫院","汐止國泰"],
+            "桃園市": ["林口長庚","桃園醫院","聖保祿醫院","敏盛醫院","壢新醫院"],
+            "台中市": ["台中榮總","中山醫院","中國醫藥大學附設醫院","童綜合醫院","澄清醫院"],
+            "台南市": ["成大醫院","台南市立醫院","奇美醫院","郭綜合醫院","安南醫院"],
+            "高雄市": ["高雄榮總","高雄醫學大學附設中和紀念醫院","義大醫院","大同醫院","阮綜合醫院"],
+            "新竹市": ["新竹馬偕","新竹國泰","台大醫院新竹分院"],
+            "彰化縣": ["彰化基督教醫院","秀傳醫院","員林基督教醫院"],
+            "宜蘭縣": ["羅東博愛醫院","陽明大學附設醫院宜蘭院區"],
+            "花蓮縣": ["花蓮慈濟","花蓮國軍總醫院","門諾醫院"]
+        };
+        
+        // 初始化縣市選單
+        function initCitySelect() {
+            const select = document.getElementById("publicCitySelect");
+            if(!select) return;
+            Object.keys(taiwanCities).forEach(function(city) {
+                const opt = document.createElement("option");
+                opt.value = city;
+                opt.textContent = city;
+                select.appendChild(opt);
+            });
+        }
+        
+        // 更新區域選單
+        function updatePublicDistricts() {
+            const city = document.getElementById("publicCitySelect").value;
+            const districtSelect = document.getElementById("publicDistrictSelect");
+            districtSelect.innerHTML = "<option value=\"\">請選擇區域</option>";
+            if(city && taiwanCities[city]) {
+                taiwanCities[city].forEach(function(district) {
+                    const opt = document.createElement("option");
+                    opt.value = district;
+                    opt.textContent = district;
+                    districtSelect.appendChild(opt);
+                });
+            }
+        }
+        
+        // 需求類型變更
+        function onServiceTypeChange() {
+            const serviceType = document.getElementById("serviceType").value;
+            const hospitalGroup = document.getElementById("hospitalGroup");
+            if(serviceType === "hospital") {
+                hospitalGroup.style.display = "block";
+                updateHospitalSelect();
+            } else {
+                hospitalGroup.style.display = "none";
+            }
+        }
+        
+        // 更新醫院選單
+        function updateHospitalSelect() {
+            const city = document.getElementById("publicCitySelect").value;
+            const hospitalSelect = document.getElementById("hospitalSelect");
+            hospitalSelect.innerHTML = "<option value=\"\">請選擇醫院</option>";
+            if(city && hospitals[city]) {
+                hospitals[city].forEach(function(hospital) {
+                    const opt = document.createElement("option");
+                    opt.value = hospital;
+                    opt.textContent = hospital;
+                    hospitalSelect.appendChild(opt);
+                });
+            }
+        }
+        
+        // 初始化
+        initCitySelect();
+
+    </script>
 </body>
 </html>
