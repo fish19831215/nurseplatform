@@ -1,11 +1,10 @@
 {
   "name": "nurse-platform",
   "version": "1.0.0",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "npx serve -l 8080"
   },
-  "engines": {
-    "node": ">=14"
+  "dependencies": {
+    "serve": "^14.0.0"
   }
 }
