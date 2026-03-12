@@ -1,7 +1,11 @@
 {
   "name": "nurse-platform",
   "version": "1.0.0",
-  "static": {
-    "directory": "public"
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
   }
 }
